@@ -34,8 +34,10 @@ RUN mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys && chmod 700 /root/.
 RUN a2enmod rewrite
 RUN a2enmod headers
 
-#ADD phpinfo.php /var/www/html/
-#ADD supervisord.conf /etc/
+# Enable PHP mods.
+RUN php5enmod mcrypt
+RUN php5enmod curl
+
 EXPOSE 22 80 443
 
 ADD config/apache2.conf /etc/apache2
