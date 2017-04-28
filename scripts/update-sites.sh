@@ -24,6 +24,8 @@ if [ -n "$DOMAINS" ]; then
             # Save some time
             if [ -d "$SITES_DIR/$DOMAIN/htdocs" ]; then
                 sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN/htdocs,g /etc/apache2/sites-available/$DOMAIN.conf
+            elif [ -d "$SITES_DIR/$DOMAIN/public" ]; then
+                sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN/public,g /etc/apache2/sites-available/$DOMAIN.conf
             else
                 sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN,g /etc/apache2/sites-available/$DOMAIN.conf
             fi
