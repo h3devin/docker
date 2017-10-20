@@ -33,17 +33,25 @@ RUN mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys && chmod 700 /root/.
 # Enable apache mods.
 RUN a2enmod rewrite
 RUN a2enmod headers
+RUN a2enmod ssl
 
 # Enable PHP mods.
 RUN php5enmod mcrypt
 RUN php5enmod curl
 
+#ADD phpinfo.php /var/www/html/
+#ADD supervisord.conf /etc/
 EXPOSE 22 80 443
+
+RUN mkdir -p /etc/apache2/certs
 
 ADD config/apache2.conf /etc/apache2
 ADD config/default-site.conf /etc/apache2/sites-available
 
 ADD scripts/update-sites.sh /root
 RUN chmod +x /root/update-sites.sh
+
+ADD certs/host.key /etc/apache2/certs
+ADD certs/*.cert /etc/apache2/certs
 
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
