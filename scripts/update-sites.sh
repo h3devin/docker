@@ -2,7 +2,7 @@
 
 DOMAINS=()
 SITES_DIR="/var/www"
-SITES_ENABLED_DIR="/etc/apache2/sites-enabled"
+
 if [ -d "$SITES_DIR" ]; then
      cd $SITES_DIR;
      for i in $(ls -d */); do
@@ -15,22 +15,26 @@ if [ -n "$DOMAINS" ]; then
     for ((i=0; i < ${#DOMAINS[@]}; i++)); do
         ## Current Domain
         DOMAIN=${DOMAINS[$i]}
-        if [ ! -f /etc/apache2/sites-available/$DOMAIN.conf ]; then
+        if [ ! -f /etc/apache2/sites-available/"$DOMAIN".conf ]; then
             echo "Creating config for $DOMAIN..."
-            mkdir -p $SITES_DIR/$DOMAIN
-            sudo cp /etc/apache2/sites-available/default-site.conf /etc/apache2/sites-available/$DOMAIN.conf
-            sudo sed -i s,placeholder.dev,$DOMAIN,g /etc/apache2/sites-available/$DOMAIN.conf
+            mkdir -p "$SITES_DIR"/"$DOMAIN"
+            sudo cp /etc/apache2/sites-available/default-site.conf /etc/apache2/sites-available/"$DOMAIN".conf
+            sudo sed -i s,placeholder.dev,"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
 
             # Save some time
             if [ -d "$SITES_DIR/$DOMAIN/htdocs" ]; then
-                sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN/htdocs,g /etc/apache2/sites-available/$DOMAIN.conf
-            elif [ -d "$SITES_DIR/$DOMAIN/public" ]; then
-                sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN/public,g /etc/apache2/sites-available/$DOMAIN.conf
+                sudo sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN"/htdocs,g /etc/apache2/sites-available/"$DOMAIN".conf
             else
-                sudo sed -i s,/var/www/placeholder,$SITES_DIR/$DOMAIN,g /etc/apache2/sites-available/$DOMAIN.conf
+                sudo sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
             fi
 
-            sudo a2ensite $DOMAIN.conf
+            # Enable HTTPS if cert is present
+            if [ -f /etc/apache2/certs/"$DOMAIN".cert ]; then
+                sudo sed -i s,placeholder.cert,"$DOMAIN".cert,g /etc/apache2/sites-available/"$DOMAIN".conf
+                sudo sed -i s,#/,,g /etc/apache2/sites-available/"$DOMAIN".conf
+            fi
+
+            sudo a2ensite "$DOMAIN".conf
         fi
     done
 
