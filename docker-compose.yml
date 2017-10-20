@@ -16,13 +16,13 @@ services:
     container_name: mysql
     restart: always
 
-  web:
+  apache:
     build: .
     depends_on:
       - mysql
     ports:
      - "80:80"
-    image: web
+    image: apache
     volumes:
       - ./sites:/var/www
     container_name: apache
