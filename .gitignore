@@ -1,2 +1,6 @@
 certs/*
 !certs/.gitkeep
+
+mysql/*
+sites/*
+!sites/.gitkeep

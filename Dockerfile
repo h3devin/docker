@@ -51,7 +51,4 @@ ADD config/default-site.conf /etc/apache2/sites-available
 ADD scripts/update-sites.sh /root
 RUN chmod +x /root/update-sites.sh
 
-ADD certs/host.key /etc/apache2/certs
-ADD certs/*.cert /etc/apache2/certs
-
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
