@@ -18,25 +18,25 @@ if [ -n "$DOMAINS" ]; then
         if [ ! -f /etc/apache2/sites-available/"$DOMAIN".conf ]; then
             echo "Creating config for $DOMAIN..."
             mkdir -p "$SITES_DIR"/"$DOMAIN"
-            sudo cp /etc/apache2/sites-available/default-site.conf /etc/apache2/sites-available/"$DOMAIN".conf
-            sudo sed -i s,placeholder.dev,"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
+            cp /etc/apache2/sites-available/default-site.conf /etc/apache2/sites-available/"$DOMAIN".conf
+            sed -i s,placeholder.dev,"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
 
             # Save some time
             if [ -d "$SITES_DIR/$DOMAIN/htdocs" ]; then
-                sudo sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN"/htdocs,g /etc/apache2/sites-available/"$DOMAIN".conf
+                sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN"/htdocs,g /etc/apache2/sites-available/"$DOMAIN".conf
             else
-                sudo sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
+                sed -i s,/var/www/placeholder,"$SITES_DIR"/"$DOMAIN",g /etc/apache2/sites-available/"$DOMAIN".conf
             fi
 
             # Enable HTTPS if cert is present
             if [ -f /etc/apache2/certs/"$DOMAIN".cert ]; then
-                sudo sed -i s,placeholder.cert,"$DOMAIN".cert,g /etc/apache2/sites-available/"$DOMAIN".conf
-                sudo sed -i s,#/,,g /etc/apache2/sites-available/"$DOMAIN".conf
+                sed -i s,placeholder.cert,"$DOMAIN".cert,g /etc/apache2/sites-available/"$DOMAIN".conf
+                sed -i s,#/,,g /etc/apache2/sites-available/"$DOMAIN".conf
             fi
 
-            sudo a2ensite "$DOMAIN".conf
+            a2ensite "$DOMAIN".conf
         fi
     done
 
-    sudo service apache2 restart
+    service apache2 restart
 fi

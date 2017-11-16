@@ -4,3 +4,5 @@ certs/*
 mysql/*
 sites/*
 !sites/.gitkeep
+
+sites_config.yml

@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Devin Lumley <devin@highwaythreesolutions.com>
 
 # Setup environment
@@ -12,7 +12,8 @@ RUN apt-get install -y apache2 vim bash-completion unzip
 RUN mkdir -p /var/lock/apache2 /var/run/apache2
 
 # install php
-RUN apt-get install -y php5 php5-mysql php5-dev php5-gd php5-memcache php5-pspell php5-snmp snmp php5-xmlrpc libapache2-mod-php5 php5-cli php5-curl php5-mcrypt
+
+RUN apt-get install -y php7.0 libapache2-mod-php7.0 php7.0-cli php7.0-common php7.0-mbstring php7.0-gd php7.0-intl php7.0-xml php7.0-mysql php7.0-mcrypt php7.0-zip
 #RUN yum install -y php php-mysql php-devel php-gd php-pecl-memcache php-pspell php-snmp php-xmlrpc php-xml
 
 # install sshd
@@ -36,8 +37,8 @@ RUN a2enmod headers
 RUN a2enmod ssl
 
 # Enable PHP mods.
-RUN php5enmod mcrypt
-RUN php5enmod curl
+#RUN php7enmod mcrypt
+#RUN php7enmod curl
 
 #ADD phpinfo.php /var/www/html/
 #ADD supervisord.conf /etc/
@@ -48,7 +49,14 @@ RUN mkdir -p /etc/apache2/certs
 ADD config/apache2.conf /etc/apache2
 ADD config/default-site.conf /etc/apache2/sites-available
 
+RUN touch /root/update-sites-from-config.sh; rm /root/update-sites-from-config.sh;
+ADD scripts/update-sites-from-config.sh /root
+RUN touch /root/update-sites.sh; rm /root/update-sites.sh;
 ADD scripts/update-sites.sh /root
+RUN touch /root/sites_config.yml; rm /root/sites_config.yml;
+ADD sites_config.yml /root
+
 RUN chmod +x /root/update-sites.sh
+RUN chmod +x /root/update-sites-from-config.sh
 
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

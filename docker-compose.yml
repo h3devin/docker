@@ -3,7 +3,7 @@ services:
   mysql:
     image: mysql
     ports:
-      - "3306:3306"
+      - "3309:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: '%'
@@ -13,7 +13,7 @@ services:
       default:
         aliases:
           - mysql
-    container_name: mysql
+    container_name: mysql_d8
     restart: always
 
   apache:
@@ -21,11 +21,11 @@ services:
     depends_on:
       - mysql
     ports:
-     - "80:80"
-     - "443:443"
+      - "89:80"
+      - "445:443"
     image: apache
     volumes:
       - ./sites:/var/www
       - ./certs:/etc/apache2/certs
-    container_name: apache
+    container_name: apache_d8
     restart: always

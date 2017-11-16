@@ -1,0 +1,4 @@
+# required to update docker apach2 configs.
+sitename:
+  path: path/to/site
+  domain: sitename
