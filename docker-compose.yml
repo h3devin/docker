@@ -3,7 +3,7 @@ services:
   mysql:
     image: mysql
     ports:
-      - "3309:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: '%'
@@ -21,7 +21,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "89:80"
+      - "8088:80"
       - "445:443"
     image: apache
     volumes:

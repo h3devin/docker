@@ -22,7 +22,6 @@ CONFIG="$(<$CONFIG_PATH)"
 
 eval $(parse_yaml $CONFIG_PATH "sites_")
 
-
 while read -r line; do
     if [[ $line =~ ^[a-zA-Z0-9]+:$ ]]; then
         DOMAINS+=("${line::${#line}-1}")
@@ -41,7 +40,7 @@ if [ -n "$DOMAINS" ]; then
             echo "Creating config for ${!domain}..."
             mkdir -p "${!path}"
             cp /etc/apache2/sites-available/default-site.conf /etc/apache2/sites-available/"${!domain}".conf
-            sed -i s,placeholder.dev,"${!domain}.dev",g /etc/apache2/sites-available/"${!domain}".conf
+            sed -i s,placeholder.dev,"${!domain}",g /etc/apache2/sites-available/"${!domain}".conf
 
             # Save some time
             if [ -d "${!path}/htdocs" ]; then

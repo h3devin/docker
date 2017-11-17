@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y
 
 # install http
-RUN apt-get install -y apache2 vim bash-completion unzip
+RUN apt-get install -y apache2 vim bash-completion unzip curl
 RUN mkdir -p /var/lock/apache2 /var/run/apache2
 
 # install php
@@ -37,12 +37,16 @@ RUN a2enmod headers
 RUN a2enmod ssl
 
 # Enable PHP mods.
-#RUN php7enmod mcrypt
-#RUN php7enmod curl
+#RUN php5enmod mcrypt
+#RUN php5enmod curl
 
 #ADD phpinfo.php /var/www/html/
 #ADD supervisord.conf /etc/
 EXPOSE 22 80 443
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
 
 RUN mkdir -p /etc/apache2/certs
 
